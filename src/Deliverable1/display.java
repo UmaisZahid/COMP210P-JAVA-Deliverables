@@ -1,9 +1,6 @@
 package Deliverable1;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.List;
+import java.util.*;
 
 public class display {
     // Initialise display/menu related fields.
@@ -59,11 +56,26 @@ public class display {
 
     public void displayCreateProject(){
         System.out.println("\t\t\t\tCREATE PROJECT\n");
+
+        // Request and scan project name
         System.out.print("\tPlease provide a project name: ");
-        scan.next();
+        scan.next(); // Scan new line character (\n)
         String projectName = scan.nextLine();
         System.out.print("\tPlease provide the number of members: ");
-        int noMembers = scan.nextInt();
+        int noMembers = 0;
+
+        // If input is not integer, catch mismatch exception and request input once more
+        boolean inputValid = false;
+        while(!(inputValid)){
+            try{
+                noMembers = scan.nextInt();
+                inputValid = true;
+            } catch(InputMismatchException ime) {
+                System.out.print("\tInvalid input, please enter an integer: ");
+                scan.next();
+            }
+        }
+
         ArrayList<String> memberNames = new ArrayList<>();
 
         for(int i = 0; i<noMembers; i++){
