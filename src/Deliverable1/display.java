@@ -3,23 +3,25 @@ package Deliverable1;
 import java.util.*;
 
 public class display {
-
+    //----------------------------------------------------------------------
     // Initialise display/menu related fields.
+    //----------------------------------------------------------------------
     private static Scanner scan = new Scanner(System.in); // Static scanner instance for input
     private final static List<Character> menuOptions = Arrays.asList('A', 'a', 'V', 'v', 'C', 'c', 'S', 's', 'Q', 'q','M', 'm'); // List of valid input characters
     public char option; // Variable containing current menu option choice
     public boolean exit = false; // Boolean to determine whether program should exit
 
     // Strings of paragraphs used in displayAbout() method. Formatted by formatAndPrint method to fit particular number of words per line.
-    private static String aboutTextPara1 = "Split-it was designed to help teams allocate credit for a project fairly. " +
+    final private static String aboutTextPara1 = "Split-it was designed to help teams allocate credit for a project fairly. " +
             "It works by collecting votes for a project, and allocating marks between team members.";
-    private static String aboutTextPara2 = "This idea was originally inspired by the work of Ariel Procaccia and Jonathan Goldman's programmed called " +
+    final private static String aboutTextPara2 = "This idea was originally inspired by the work of Ariel Procaccia and Jonathan Goldman's programmed called " +
             "Spliddit, which offers fair solutions for numerous division problems, including rent payments, restaurant" +
             " bills and shared tasks. To run this programme, one needs to create and register a project, collect votes " +
             "from each individual team member and the programme will calculate and display the allocated votes for the project. ";
 
-
+    //----------------------------------------------------------------------
     // Displays menu and requests user to input option.
+    //----------------------------------------------------------------------
     public void displayMenu(){
 
         System.out.println("\tWelcome to Split-it");
@@ -35,7 +37,9 @@ public class display {
     }
 
 
+    //------------------------------------------------------------------------------------------------
     // Requests user to input option, while validating input to ensure it is a valid input character
+    //------------------------------------------------------------------------------------------------
     private void pickOption(){
 
         System.out.print("\tPlease choose an option, or enter m to return to the menu: ");
@@ -51,7 +55,9 @@ public class display {
         System.out.println(); // Add spacing
     }
 
+    //---------------------------------------------------------
     // Displays about page and requests input
+    //---------------------------------------------------------
     public void displayAbout(){
         System.out.println();
         System.out.println("\t\t\t\tABOUT: Split-It");
@@ -65,7 +71,9 @@ public class display {
         pickOption(); // Request input option
     }
 
+    //---------------------------------------------------------
     // Displays create project page
+    //---------------------------------------------------------
     public void displayCreateProject(){
         System.out.println("\t\t\t\tCREATE PROJECT\n");
 
@@ -105,20 +113,25 @@ public class display {
         pickOption(); // Request option
     }
 
+    //-----------------------------------------------------------------------------------------------------
     // Display enter votes page. Currently a dummy method for future deliverables, redirects to main menu.
+    //-----------------------------------------------------------------------------------------------------
     public void displayEnterVotes(){
         System.out.println("\t\tThis is the enter votes pages");
         option = 'M'; // Set option to main menu, (redirects automatically)
     }
 
-
+    //-----------------------------------------------------------------------------------------------------
     // Display show projects page. Currently a dummy method for future deliverables, redirects to main menu.
+    //-----------------------------------------------------------------------------------------------------
     public void displayShowProjects(){
         System.out.println("\t\tThis is the show project page");
         option = 'M'; // Set option to main menu, (redirects automatically)
     }
 
+    //-----------------------------------------------------------------------------------------------------
     // Formats and prints an input String so that it has a particular number of words per line.
+    //-----------------------------------------------------------------------------------------------------
     private void formatAndPrint(String text, int wordsPerLine){
         String[] textSplit = text.split(" ");
         for (int i=0; i<(textSplit.length); i++){
