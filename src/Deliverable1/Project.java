@@ -1,20 +1,21 @@
 package Deliverable1;
 
-import javax.naming.Name;
 import java.util.ArrayList;
 
-public class project {
+public class Project {
+
     //---------------------------------------------------------
-    // Initialise project related fields
+    // Initialise Project related fields
     //---------------------------------------------------------
     private String name;
     private int noOfMembers;
     private ArrayList<String> memberNames;
+    private ArrayList<ArrayList<Integer>> projectVotes;
 
     //---------------------------------------------------------
-    // Constructor:- Create project instance.
+    // Constructor:- Create Project instance.
     //---------------------------------------------------------
-    public project(String name, int noOfMembers, ArrayList<String> memberNames) {
+    public Project(String name, int noOfMembers, ArrayList<String> memberNames) {
         this.name = name;
         this.noOfMembers = noOfMembers;
         this.memberNames = memberNames;
@@ -28,7 +29,7 @@ public class project {
     }
 
     //---------------------------------------------------------
-    // Returns name of project. (getter method)
+    // Returns name of Project. (getter method)
     //---------------------------------------------------------
     public String returnName(){
         return this.name;
@@ -40,4 +41,7 @@ public class project {
     public ArrayList<String> returnMemberNames(){
         return this.memberNames;
     }
+
+
+
 }
