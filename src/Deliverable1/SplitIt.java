@@ -27,7 +27,6 @@ public class SplitIt{
             // Serialize projects to file
             try(FileWriter fileWriter = new FileWriter("ListOfProjects.json")){
                 jsonSerializer.toJson(projectList.toArray(), fileWriter);
-                System.out.println("Projects successfully saved! ");
             } catch (IOException ioe) {
                 System.out.println("There was an error storing the projects. :(");
             }
@@ -44,6 +43,7 @@ public class SplitIt{
         } catch (IOException ioe) {
         }
     }
+
 
     public static void main(String[] args){
         //---------------------------------------------------------

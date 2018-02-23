@@ -1,7 +1,5 @@
 package Deliverable1;
 
-import java.util.ArrayList;
-
 public class Project {
 
     //---------------------------------------------------------
@@ -9,16 +7,17 @@ public class Project {
     //---------------------------------------------------------
     private String name;
     private int noOfMembers;
-    private ArrayList<String> memberNames;
-    private ArrayList<ArrayList<Integer>> projectVotes;
+    private String[] memberNames;
+    private int[][] projectVotes;
 
     //---------------------------------------------------------
     // Constructor:- Create Project instance.
     //---------------------------------------------------------
-    public Project(String name, int noOfMembers, ArrayList<String> memberNames) {
+    public Project(String name, int noOfMembers, String[] memberNames) {
         this.name = name;
         this.noOfMembers = noOfMembers;
         this.memberNames = memberNames;
+        this.projectVotes = new int[noOfMembers][noOfMembers];
     }
 
     //---------------------------------------------------------
@@ -38,8 +37,15 @@ public class Project {
     //---------------------------------------------------------
     // Returns array list of members names. (getter method)
     //---------------------------------------------------------
-    public ArrayList<String> returnMemberNames(){
+    public String[] returnMemberNames(){
         return this.memberNames;
+    }
+
+    //---------------------------------------------------------
+    // Returns array of arrays containing member votes. First index: voting member, second index: member voted on. (getter method)
+    //---------------------------------------------------------
+    public int[][] returnProjectVotes(){
+        return this.projectVotes;
     }
 
 
