@@ -1,9 +1,6 @@
 package Deliverable1;
 
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.List;
+import java.util.*;
 
 public class Display {
     //----------------------------------------------------------------------
@@ -77,18 +74,21 @@ public class Display {
     //---------------------------------------------------------
     public void displayCreateProject(){
 
-        // Begins create project prompt
         System.out.println("\t\t\t\tCREATE PROJECT\n");
 
         // Request and scan Project name
         System.out.print("\tPlease provide a Project name: ");
-        scan.nextLine(); // Consume new line character (\n)
-        String projectName = scan.nextLine();
+
+        // Consume new line character (\n)
+        scan.nextLine();
+
+        // Scan project name, ensure it only contains letters and is not empty
+        String projectName = stringInputValidation(false, true);
         System.out.print("\tPlease provide the number of members (Maximum of 50 members per project)s: ");
         int noMembers = 0;
 
         // Scan the next integer while ensuring it's valid input
-        noMembers = integerInputValidation(0,50, "");
+        noMembers = integerInputValidation(1,50, "\tPlease enter a number between 1 and 50: ");
 
         // Initialise array of member names
         String[] memberNames = new String[noMembers];
@@ -96,14 +96,15 @@ public class Display {
         // Iterate over number of members, and request members names.
         for(int i = 0; i<noMembers; i++){
             System.out.print("\tPlease provide the name of member " + (i+1) + ": ");
-            memberNames[i] = (scan.nextLine());
+            memberNames[i] = stringInputValidation(true,true);
         }
 
-        // Create Project instance, and provide necessary constructor arguments
+        // Create Project instance, and save project to file.
         Project newProject = new Project(projectName,noMembers,memberNames);
         SplitIt.projectList.add(newProject); // Add project to project list arraylist.
         SplitIt.storeProjectsToFile();
         System.out.println("\n\t\t\t\tPROJECT CREATED AND SAVED SUCCESSFULLY!\n");
+
         pickOption(); // Request menu option
     }
 
@@ -129,7 +130,7 @@ public class Display {
         // Get project data. (Member names and number of members)
         int noOfMembers = chosenProject.returnNoOfMembers();
         String memberNames[] = chosenProject.returnMemberNames();
-        int[][] projectsVotes = chosenProject.returnProjectVotes();
+        HashMap<String, HashMap<String,Integer>> projectsVotes = chosenProject.returnProjectVotes();
 
         for (int votingMember = 0; votingMember < noOfMembers; votingMember++){
 
@@ -144,16 +145,21 @@ public class Display {
                 if (memberVotedOn != votingMember){
                     // If this is the last member to be voted on, ensure that the entered value is the remaining points.
                     noOfMembersVotedOn++;
+
                     if (noOfMembersVotedOn == (noOfMembers-1)){
                         // If there is only one vote remaining, automatically set it to the remaining points.
-                        projectsVotes[votingMember][memberVotedOn] = remainingPoints;
+                        // The line below sets the vote from the votingMember to the memberVotedOn with the remaining points.
+                        projectsVotes.get(memberNames[votingMember]).put(memberNames[memberVotedOn],remainingPoints);
+
                         System.out.print("\t\tEnter " + memberNames[votingMember] + "'s vote for " + memberNames[memberVotedOn] + ": " + remainingPoints);
                         System.out.println(" (Vote set automatically to remaining points!)");
                     } else {
-                        // Request for vote
+                        // Otherwise request for vote
                         System.out.print("\t\tEnter " + memberNames[votingMember] + "'s vote for " + memberNames[memberVotedOn] + ": ");
                         int currentVote = integerInputValidation(0,remainingPoints, "\t\tPlease enter a vote between " + 0 + " and " + remainingPoints + ": ");
-                        projectsVotes[votingMember][memberVotedOn] = currentVote; // Set the vote the user selects to the appropriate point in the array.
+
+                        // The line below sets the vote from the votingMember to the memberVotedOn with the vote provided
+                        projectsVotes.get(memberNames[votingMember]).put(memberNames[memberVotedOn],currentVote); // Get votes array from hashmap and update vote
                         remainingPoints  -= currentVote; // Update the number of remaining points.
                     }
                 }
@@ -216,6 +222,42 @@ public class Display {
             }
         }
         return inputInt;
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    // Validates scanned input as being a String with certain properties. (not empty, only letters etc.)
+    // If not invalid, requests input until it is.
+    //-----------------------------------------------------------------------------------------------------
+    private String stringInputValidation(boolean acceptOnlyLetters, boolean checkEmpty ){
+        boolean inputValid = false;
+        String inputString = "";
+
+        while(!inputValid){
+            inputValid = true; // Set String to be valid by default. If it does not match any requirements, it is set to false.
+            try{
+                inputString =  scan.nextLine().trim(); // Scan input String and trim whitespace on either side.
+
+                // Check String is not empty
+                if (checkEmpty) {
+                    if (inputString.isEmpty()) {
+                        inputValid = false;
+                        System.out.print("\tInput empty, please provide a non-empty string. Try again: ");
+                    }
+                }
+                // Check String only uses letters.
+                if (acceptOnlyLetters){
+                    if (!(inputString.matches("[a-zA-Z ]+|^$"))){
+                        inputValid = false;
+                        System.out.print("\tPlease ensure input contains only letters. Try again: ");
+                    }
+                }
+            // If scanning fails for some other reason
+            } catch(NoSuchElementException nsee) {
+                inputValid = false;
+                System.out.print("\t\tInvalid input, unable to scan input!");
+            }
+        }
+        return inputString;
     }
 
     //-----------------------------------------------------------------------------------------------------
