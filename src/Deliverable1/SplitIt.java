@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class SplitIt{
 
@@ -20,12 +21,10 @@ public class SplitIt{
     //----------------------------------------------------------------------
     // Static function to store array list of projects in JSON format in .json file.
     //----------------------------------------------------------------------
-    public static void storeProjectsToFile(){
-        if (projectList == null){
-            // Nothing to store
-        } else {
+    public static void storeProjectsToFile() {
+        if (!projectList.isEmpty()) {
             // Serialize projects to file
-            try(FileWriter fileWriter = new FileWriter("ListOfProjects.json")){
+            try (FileWriter fileWriter = new FileWriter("ListOfProjects.json")) {
                 jsonSerializer.toJson(projectList.toArray(), fileWriter);
             } catch (IOException ioe) {
                 System.out.println("There was an error storing the projects. :(");
