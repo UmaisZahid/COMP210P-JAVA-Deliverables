@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class SplitIt{
 
@@ -17,14 +16,15 @@ public class SplitIt{
     //----------------------------------------------------------------------
     private static Gson jsonSerializer = new GsonBuilder().setPrettyPrinting().create();
     public static ArrayList<Project> projectList = new ArrayList<Project>();
+    private static final String PROJECT_LIST_FILE_NAME = "ListOfProjects.json";
 
     //----------------------------------------------------------------------
-    // Static function to store array list of projects in JSON format in .json file.
+    // This static function stores the array list of projects in JSON format in a .json file.
     //----------------------------------------------------------------------
     public static void storeProjectsToFile() {
         if (!projectList.isEmpty()) {
-            // Serialize projects to file
-            try (FileWriter fileWriter = new FileWriter("ListOfProjects.json")) {
+            // If project list is not empty, serialize project list to JSON file
+            try (FileWriter fileWriter = new FileWriter(PROJECT_LIST_FILE_NAME)) {
                 jsonSerializer.toJson(projectList.toArray(), fileWriter);
             } catch (IOException ioe) {
                 System.out.println("There was an error storing the projects. :(");
@@ -33,11 +33,11 @@ public class SplitIt{
     }
 
     //----------------------------------------------------------------------
-    // Static function to create array list of projects from JSON format in .json file.
+    // This static function reads the array list of projects in JSON format from a .json file.
     //----------------------------------------------------------------------
-    public static void readProjectsFromFile(){
-        // Deserialize projects from file
-        try(FileReader fileReader = new FileReader("ListOfProjects.json")){
+    private static void readProjectsFromFile(){
+        //Deserialize projects from file, if no file exists, catch exception and do nothing.
+        try(FileReader fileReader = new FileReader(PROJECT_LIST_FILE_NAME)){
             projectList = new ArrayList<Project>(Arrays.asList(jsonSerializer.fromJson(fileReader, Project[].class)));
         } catch (IOException ioe) {
         }
@@ -46,7 +46,7 @@ public class SplitIt{
 
     public static void main(String[] args){
         //---------------------------------------------------------
-        // Create new Display instance, display menu and populate project array list.
+        // Create new Display instance, display menu and populate project array list from JSON file.
         //---------------------------------------------------------
         Display currentDisplay = new Display();
         currentDisplay.displayMenu();

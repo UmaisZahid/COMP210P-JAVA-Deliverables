@@ -10,7 +10,6 @@ public class Project {
     private String name;
     private int noOfMembers;
     private String[] memberNames;
-    //private int[][] projectVotes;
     private HashMap<String, HashMap<String,Integer>> projectVotes;
 
     //---------------------------------------------------------
@@ -36,28 +35,28 @@ public class Project {
     }
 
     //---------------------------------------------------------
-    // Returns the number of members. (getter method)
+    // Getter:- Returns the number of members.
     //---------------------------------------------------------
     public int returnNoOfMembers(){
         return this.noOfMembers;
     }
 
     //---------------------------------------------------------
-    // Returns name of Project. (getter method)
+    // Getter:- returns name of Project.
     //---------------------------------------------------------
     public String returnName(){
         return this.name;
     }
 
     //---------------------------------------------------------
-    // Returns array list of members names. (getter method)
+    // Getter:- Returns array list of members names.
     //---------------------------------------------------------
     public String[] returnMemberNames(){
         return this.memberNames;
     }
 
     //---------------------------------------------------------
-    // Returns array of arrays containing member votes. First index: voting member, second index: member voted on. (getter method)
+    // Getter:- Returns members votes in the form of a HashMap of Strings and HashMaps. (VoterName: (VoteeName: Vote))
     //---------------------------------------------------------
     public HashMap<String,HashMap<String,Integer>> returnProjectVotes(){
         return this.projectVotes;

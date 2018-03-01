@@ -50,19 +50,22 @@ public class Display {
     // Displays about page and requests input
     //---------------------------------------------------------
     public void displayAbout(){
-        // Strings of paragraphs used in displayAbout() method. Formatted by formatAndPrint method to fit particular number of words per line.
+        // These are Strings of paragraphs used in the About page.
+        // They are then Formatted by formatAndPrint method to fit a
+        // particular number of words per line.
         String ABOUTTEXTPARAGRAPH1 = "Split-it was designed to help teams allocate credit for a Project fairly. " +
                 "It works by collecting votes for a Project, and allocating marks between team members.";
         String ABOUTTEXTPARAGRAPH2 = "This idea was originally inspired by the work of Ariel Procaccia and Jonathan Goldman's programmed called " +
                 "Spliddit, which offers fair solutions for numerous division problems, including rent payments, restaurant" +
                 " bills and shared tasks. To run this programme, one needs to create and register a Project, collect votes " +
                 "from each individual team member and the programme will calculate and Display the allocated votes for the Project. ";
+        // Format and print
         System.out.println();
         System.out.println("\t\t\t\tABOUT: Split-It");
         System.out.println();
         formatAndPrint(ABOUTTEXTPARAGRAPH1, 7);
         System.out.println();
-        formatAndPrint(ABOUTTEXTPARAGRAPH1, 7);
+        formatAndPrint(ABOUTTEXTPARAGRAPH2, 7);
         System.out.println();
         System.out.println();
 
@@ -85,10 +88,9 @@ public class Display {
         // Scan project name, ensure it only contains letters and is not empty
         String projectName = stringInputValidation(false, true);
         System.out.print("\tPlease provide the number of members (Maximum of 50 members per project)s: ");
-        int noMembers = 0;
 
         // Scan the next integer while ensuring it's valid input
-        noMembers = integerInputValidation(1,50, "\tPlease enter a number between 1 and 50: ");
+        int noMembers = integerInputValidation(1,50, "\tPlease enter a number between 1 and 50: ");
 
         // Initialise array of member names
         String[] memberNames = new String[noMembers];
@@ -122,8 +124,11 @@ public class Display {
                 System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).returnName());
             }
         }
+        // Take their choice of project and validate the input
         System.out.print("\n\tYour choice: "); // They enter their choice after this prommpt
         int choice = integerInputValidation(1,SplitIt.projectList.size(), ""); // Scan next integer while checking it's valid input, see method definition for more information
+
+        // Return the project name
         Project chosenProject = SplitIt.projectList.get(choice-1);
         System.out.println("\tThere are " + chosenProject.returnNoOfMembers() + " members in this group.");
 
@@ -188,6 +193,9 @@ public class Display {
 
     //-----------------------------------------------------------------------------------------------------
     // Formats and prints an input String so that it has a particular number of words per line.
+    // @param text: String that is to be formatted
+    // @param wordsPerLine: Integer of the number of words per line that text should be formatted to
+    // @return void: Prints formatted string
     //-----------------------------------------------------------------------------------------------------
     private void formatAndPrint(String text, int wordsPerLine){
         String[] textSplit = text.split(" ");
@@ -201,8 +209,11 @@ public class Display {
     }
 
     //-----------------------------------------------------------------------------------------------------
-    // Validates scanned input as being integer. If not valid, requests input until it is.
-    //-----------------------------------------------------------------------------------------------------
+    // Scans input and validates scanned input as being an integer within certain provided ranges.
+    // If not integer, requests input until it is.
+    // @param minVal, maxVal: Integers to determine the range which integer should lie within
+    // @param errorMessage: custom String which is outputted whenever incorrect input is provided
+    // @return Scanned and validated input integer
     private int integerInputValidation(int minVal, int maxVal, String errorMessage){
         boolean inputValid = false;
         int inputInt = 0;
@@ -224,8 +235,11 @@ public class Display {
     }
 
     //-----------------------------------------------------------------------------------------------------
-    // Validates scanned input as being a String with certain properties. (not empty, only letters etc.)
-    // If not invalid, requests input until it is.
+    // Scans input and validates scanned input as being a String with certain properties. (not empty, only letters etc.)
+    // If invalid, requests input until it is.
+    // @param acceptOnlyLetters boolean to determine whether method should enforce only letters in string input
+    // @param checkEmpty boolean to determine whether method should prevent empty strings
+    // @return String containing scanned and validated input. Input is also trimmed to remove encasing whitespaces.
     //-----------------------------------------------------------------------------------------------------
     private String stringInputValidation(boolean acceptOnlyLetters, boolean checkEmpty ){
         boolean inputValid = false;
