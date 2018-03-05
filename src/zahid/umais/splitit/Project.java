@@ -1,7 +1,7 @@
 package zahid.umais.splitit;
 
 import java.util.HashMap;
-import static zahid.umais.splitit.SplitIt.integerInputValidation; // Import static instance of integer input validation
+import static zahid.umais.splitit.Display.integerInputValidation; // Import static instance of integer input validation
 
 public class Project {
 
@@ -77,6 +77,7 @@ public class Project {
     // Request and set votes for this project instance
     //---------------------------------------------------------
     public void requestVotes(){
+        System.out.println("\tYou are voting for " + this.name + "!");
         System.out.println("\tThere are " + this.noOfMembers + " members in this group.");
 
         // Iterate over the members and request votes for each of them
@@ -115,6 +116,7 @@ public class Project {
         }
 
         this.votesInitialised = true; // Set votes initialised boolean to true
+        System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY SET!");
 
     }
 
@@ -122,21 +124,19 @@ public class Project {
     // Change the votes from a particular individual
     //---------------------------------------------------------
     public void changeVotes(){
-
-        System.out.println("\tThere are " + this.noOfMembers + " members in this group.");
-
         // Check if votes have been entered for this project
         if (!votesInitialised){
             System.out.println("\tYou have not entered any votes for this project!");
             System.out.println("\tPlease enter votes from the main menu.");
             return; // Return if no votes entered
         } else {
-            System.out.println("\tPlease select from the following options:\n ");
+            System.out.println("\tThere are " + this.noOfMembers + " members in this group.");
+            System.out.println("\tPlease select which member you are:\n ");
         }
 
         // Print member names
         for (int i = 0; i < noOfMembers; i++){
-            System.out.println("\t" + (i+1) + ") " + this.memberNames[i]);
+            System.out.println("\t\t" + (i+1) + ") " + this.memberNames[i]);
         }
 
         // Scan their choice of member and validate the input
@@ -166,8 +166,9 @@ public class Project {
             }
         }
 
-    System.out.println("\n\t\t\tVOTES SUCCESSFULLY UPDATED!");
+    System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY UPDATED!");
 
     }
+
 
 }

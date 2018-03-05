@@ -2,8 +2,6 @@ package zahid.umais.splitit;
 
 import java.util.*; // Import java utility classes
 // Import static scanner instance, and utility functions
-import static zahid.umais.splitit.SplitIt.stringInputValidation;
-import static zahid.umais.splitit.SplitIt.integerInputValidation;
 import static zahid.umais.splitit.SplitIt.scan;
 
 public class Display {
@@ -19,12 +17,14 @@ public class Display {
     //----------------------------------------------------------------------
     public void displayMenu(){
 
-        System.out.println("\tWelcome to Split-it");
         System.out.println();
+        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t\t\t\t\t\tWELCOME TO SPLIT-IT!");
+        System.out.println("\t---------------------------------------------------------------------\n");
         System.out.println("\t\tAbout (A)");
         System.out.println("\t\tCreate Project (C)");
         System.out.println("\t\tEnter Votes (V)");
-        System.out.println("\t\tChange Votes (H)");
+        System.out.println("\t\tChange Your Votes (H)");
         System.out.println("\t\tShow Project (S)");
         System.out.println("\t\tQuit (Q)");
         System.out.println();
@@ -37,19 +37,17 @@ public class Display {
     // Set option variable to the option they have provided
     //------------------------------------------------------------------------------------------------
     private void pickOption(){
-
-        System.out.print("\tPlease choose an option, or enter m to see the menu again: ");
+        System.out.print("\t***Please choose an option, or enter m to see the menu again: ***: ");
 
         option = scan.next().charAt(0); // Scan first character of input
 
         // While input is invalid, request for valid input.
         while (!(menuOptions.contains(option))){
             System.out.println();
-            System.out.print("\t\tInvalid Input, please enter again: ");
+            System.out.print("\tInvalid Input, please enter again: ");
             option = scan.next().charAt(0);
         }
 
-        System.out.println(); // Add spacing
     }
 
     //---------------------------------------------------------
@@ -67,8 +65,9 @@ public class Display {
                 "from each individual team member and the programme will calculate and Display the allocated votes for the Project. ";
         // Format and print
         System.out.println();
-        System.out.println("\t\t\t\tABOUT: Split-It");
-        System.out.println();
+        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t\t\t\t\t\t\tABOUT: Split-It");
+        System.out.println("\t---------------------------------------------------------------------\n");
         formatAndPrint(ABOUTTEXTPARAGRAPH1, 7);
         System.out.println();
         formatAndPrint(ABOUTTEXTPARAGRAPH2, 7);
@@ -82,8 +81,10 @@ public class Display {
     // Displays create Project page
     //---------------------------------------------------------
     public void displayCreateProject(){
-
-        System.out.println("\t\t\t\tCREATE PROJECT\n");
+        System.out.println();
+        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t\t\t\t\t\t\tCREATE PROJECT!");
+        System.out.println("\t---------------------------------------------------------------------\n");
 
         // Consume any new line characters (\n) left in input buffer
         scan.nextLine();
@@ -95,9 +96,11 @@ public class Display {
         String projectName = stringInputValidation(false, true,1);
 
         // Request number of members
-        System.out.print("\tPlease provide the number of members (Min: 3, Max: 50): ");
+        System.out.print("\n\tPlease provide the number of members (Min: 3, Max: 50): ");
         // Scan the next integer while ensuring it's valid input
         int noMembers = integerInputValidation(3,50, "Please enter a number between 3 and 50: ",1);
+
+        System.out.println(); // Spacing
 
         // Initialise array of member names
         String[] memberNames = new String[noMembers];
@@ -122,6 +125,10 @@ public class Display {
     //-----------------------------------------------------------------------------------------------------
     public void displayEnterVotes(){
 
+        System.out.println();
+        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t\t\t\t\t\t\tENTER VOTES!");
+        System.out.println("\t---------------------------------------------------------------------\n");
         // Request they select a project to enter votes for
         System.out.println("\tPlease choose a project from the projects list: \n");
 
@@ -157,13 +164,18 @@ public class Display {
     //-----------------------------------------------------------------------------------------------------
     public void displayChangeVotes(){
 
-        // Request they select a project to change votes for
-        System.out.println("\tPlease choose a project from the projects list: \n");
+        System.out.println();
+        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t\t\t\t\t\t\tCHANGE YOUR VOTES!");
+        System.out.println("\t---------------------------------------------------------------------");
 
         // Check if project list is empty or uninitialised. If not, output project names in a list with index.
         if (SplitIt.projectList == null || SplitIt.projectList.size() == 0){
-            System.out.println("\tI'm afraid you haven't entered any projects yet. :(");
+            System.out.println("\tI'm afraid you haven't entered any projects yet. :(\n");
+            System.out.println("\tFeel free to create some however!");
         } else {
+            // Request they select a project to change votes for
+            System.out.println("\tPlease choose a project from the projects list: \n");
 
             // Print list of project names
             for (int i = 0; i < SplitIt.projectList.size(); i++){
@@ -191,14 +203,25 @@ public class Display {
     // Display show projects page. Currently a dummy method for future deliverables, redirects to main menu.
     //-----------------------------------------------------------------------------------------------------
     public void displayShowProjects(){
-        System.out.println("\t\tHere is a list of your projects!");
+        System.out.println();
+        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t\t\t\t\t\t\tSHOW PROJECTS!");
+        System.out.println("\t---------------------------------------------------------------------\n");
 
-        if (SplitIt.projectList != null){
+
+
+        if (SplitIt.projectList != null && !SplitIt.projectList.isEmpty()){
+            System.out.println("\tHere is a list of your projects!\n");
             for (int i = 0; i < SplitIt.projectList.size(); i++){
                 System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).returnName());
             }
             System.out.println();
+        } else {
+            System.out.println("\tI'm afraid you don't have any projects. :(\n");
+            System.out.println("\tFeel free to create some however ");
         }
+
+        System.out.println(); // Spacing
 
         pickOption();
     }
@@ -227,5 +250,94 @@ public class Display {
         SplitIt.storeProjectsToFile();
         this.exit = true;
     }
+
+    //-----------------------------------------------------------------------------------------------------
+    // Scans input and validates scanned input as being an integer within certain provided ranges.
+    // If not integer, requests input until it is.
+    // @param minVal, maxVal: Integers to determine the range which integer should lie within
+    // @param errorMessage: custom String which is outputted whenever incorrect input is provided
+    // @param marginSize: integer number of tabs to add to the margin of the error messages to ensure they align properly
+    // @return Scanned and validated input integer
+    //-----------------------------------------------------------------------------------------------------
+    public static int integerInputValidation(int minVal, int maxVal, String errorMessage, int marginSize){
+        boolean inputValid = false;
+
+
+        int inputInt = 0;
+        String marginTabs = "";
+
+        for (int i = 0; i < marginSize; i++){marginTabs += "\t";}
+
+        while(!inputValid){
+            try{
+                inputInt =  scan.nextInt();
+                scan.nextLine(); // Scan any remaining new line characters in cache.
+                if (inputInt >= minVal && inputInt <= maxVal){
+                    inputValid = true;
+                } else {
+                    System.out.print(marginTabs);
+                    System.out.print(errorMessage);
+                }
+            } catch(InputMismatchException ime) {
+                scan.nextLine(); // Scan any remaining new line characters in cache.
+                System.out.print(marginTabs);
+                System.out.print("Invalid input, please enter an integer: ");
+            }
+        }
+        return inputInt;
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    // Scans input and validates scanned input as being a String with certain properties. (not empty, only letters etc.)
+    // If invalid, requests input until it is.
+    // @param acceptOnlyLetters: boolean to determine whether method should enforce only letters in string input
+    // @param checkEmpty: boolean to determine whether method should prevent empty strings
+    // @param marginSize: integer number of tabs to add to the margin of the error messages to ensure they align properly
+    // @return String containing scanned and validated input. Input is also trimmed to remove encasing whitespaces.
+    //-----------------------------------------------------------------------------------------------------
+    public static String stringInputValidation(boolean acceptOnlyLetters, boolean checkEmpty, int marginSize){
+
+        // This boolean stores whether the input is valid or not
+        boolean inputValid = false;
+        String inputString = "";
+        String marginTabs = "";
+        // Create margin string composed of tabs
+        for (int i = 0; i < marginSize; i++){marginTabs += "\t";}
+
+        // While the input is invalid, request input until it is
+        while(!inputValid){
+            inputValid = true; // Set String to be valid by default. If it does not match any criteria, it is set to false.
+            try{
+                inputString =  scan.nextLine().trim(); // Scan input String and trim whitespace on either side.
+
+                // Check String is not empty
+                if (checkEmpty) {
+                    if (inputString.isEmpty()) {
+                        inputValid = false;
+                        System.out.print(marginTabs);
+                        System.out.print("Input empty, please provide a non-empty string. Try again: ");
+                    }
+                }
+
+                // Check String only uses letters.
+                if (acceptOnlyLetters){
+                    if (!(inputString.matches("[a-zA-Z ]+|^$"))){
+                        inputValid = false;
+                        System.out.print(marginTabs);
+                        System.out.print("Please ensure input contains only letters. Try again: ");
+                    }
+                }
+
+                // If scanning fails for some other reason
+            } catch(NoSuchElementException nsee) {
+                inputValid = false;
+                System.out.print(marginTabs);
+                System.out.print("Invalid input, unable to scan input!");
+            }
+        }
+
+        return inputString;
+    }
+
 
 }
