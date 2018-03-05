@@ -19,7 +19,7 @@ public class Display {
 
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
-        System.out.println("\t\t\t\t\t\tWELCOME TO SPLIT-IT!");
+        System.out.println("\tWELCOME TO SPLIT-IT!");
         System.out.println("\t---------------------------------------------------------------------\n");
         System.out.println("\t\tAbout (A)");
         System.out.println("\t\tCreate Project (C)");
@@ -39,13 +39,13 @@ public class Display {
     private void pickOption(){
         System.out.print("\t***Please choose an option, or enter m to see the menu again: ***: ");
 
-        option = scan.next().charAt(0); // Scan first character of input
+        option = stringInputValidation(true,true,1).charAt(0); // Scan first character of input
 
         // While input is invalid, request for valid input.
         while (!(menuOptions.contains(option))){
             System.out.println();
             System.out.print("\tInvalid Input, please enter again: ");
-            option = scan.next().charAt(0);
+            option = stringInputValidation(true,true,1).charAt(0);
         }
 
     }
@@ -66,7 +66,7 @@ public class Display {
         // Format and print
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
-        System.out.println("\t\t\t\t\t\t\tABOUT: Split-It");
+        System.out.println("\tABOUT: Split-It");
         System.out.println("\t---------------------------------------------------------------------\n");
         formatAndPrint(ABOUTTEXTPARAGRAPH1, 7);
         System.out.println();
@@ -83,11 +83,8 @@ public class Display {
     public void displayCreateProject(){
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
-        System.out.println("\t\t\t\t\t\t\tCREATE PROJECT!");
+        System.out.println("\tCREATE PROJECT!");
         System.out.println("\t---------------------------------------------------------------------\n");
-
-        // Consume any new line characters (\n) left in input buffer
-        scan.nextLine();
 
         // Request and scan Project name
         System.out.print("\tPlease provide a Project name: ");
@@ -127,7 +124,7 @@ public class Display {
 
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
-        System.out.println("\t\t\t\t\t\t\tENTER VOTES!");
+        System.out.println("\tENTER VOTES!");
         System.out.println("\t---------------------------------------------------------------------\n");
         // Request they select a project to enter votes for
         System.out.println("\tPlease choose a project from the projects list: \n");
@@ -136,7 +133,6 @@ public class Display {
         if (SplitIt.projectList == null || SplitIt.projectList.size() == 0){
             System.out.println("\tI'm afraid you haven't entered any projects yet. :(");
         } else {
-
             // Print list of project names
             for (int i = 0; i < SplitIt.projectList.size(); i++){
                 System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).returnName());
@@ -149,8 +145,30 @@ public class Display {
             // Return the project name
             Project chosenProject = SplitIt.projectList.get(choice-1);
 
-            // Request votes for the project
-            chosenProject.requestVotes();
+            // Check if votes have already been added
+            if (chosenProject.areVotesInitialised()){
+                System.out.println("\tYou will be overwriting your previous votes!");
+                System.out.print("\tAre you sure this is what you want to do, enter y for Yes, n for No: ");
+
+                // Scan first character of input
+                char yesno = ' ';
+                yesno = stringInputValidation(true, true,1).charAt(0);
+
+                // While input is invalid, request for valid input.
+                while (yesno != 'y' && yesno != 'Y' && yesno != 'n' && yesno != 'N'){
+                    System.out.println();
+                    System.out.print("\tInvalid Input, please enter again: ");
+                    yesno = stringInputValidation(true, true,1).charAt(0);
+                }
+                if (Character.toLowerCase(yesno) == 'y'){
+                    // Request votes for the project
+                    chosenProject.requestVotes();
+                }
+            } else {
+                // Request votes for the project
+                chosenProject.requestVotes();
+            }
+
         }
 
         System.out.println(); // Spacing
@@ -166,7 +184,7 @@ public class Display {
 
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
-        System.out.println("\t\t\t\t\t\t\tCHANGE YOUR VOTES!");
+        System.out.println("\tCHANGE YOUR VOTES!");
         System.out.println("\t---------------------------------------------------------------------");
 
         // Check if project list is empty or uninitialised. If not, output project names in a list with index.
@@ -205,11 +223,10 @@ public class Display {
     public void displayShowProjects(){
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
-        System.out.println("\t\t\t\t\t\t\tSHOW PROJECTS!");
+        System.out.println("\tSHOW PROJECTS!");
         System.out.println("\t---------------------------------------------------------------------\n");
 
-
-
+        // List project names
         if (SplitIt.projectList != null && !SplitIt.projectList.isEmpty()){
             System.out.println("\tHere is a list of your projects!\n");
             for (int i = 0; i < SplitIt.projectList.size(); i++){

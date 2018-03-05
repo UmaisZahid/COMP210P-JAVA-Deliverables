@@ -59,13 +59,18 @@ public class Project {
     }
 
     //---------------------------------------------------------
+    // Getter:- Returns votes intialised boolean.
+    //---------------------------------------------------------
+    public boolean areVotesInitialised(){
+        return this.votesInitialised;
+    }
+
+    //---------------------------------------------------------
     // Getter:- Returns array list of members names.
     //---------------------------------------------------------
     public String[] returnMemberNames(){
         return this.memberNames;
     }
-
-
     //---------------------------------------------------------
     // Getter:- Returns members votes in the form of a HashMap of Strings and HashMaps. (VoterName: (VoteeName: Vote))
     //---------------------------------------------------------
@@ -74,7 +79,7 @@ public class Project {
     }
 
     //---------------------------------------------------------
-    // Request and set votes for this project instance
+    // Setter:- Request and set votes for this project instance
     //---------------------------------------------------------
     public void requestVotes(){
         System.out.println("\tYou are voting for " + this.name + "!");
@@ -121,7 +126,7 @@ public class Project {
     }
 
     //---------------------------------------------------------
-    // Change the votes from a particular individual
+    // Setter:- Change the votes from a particular individual
     //---------------------------------------------------------
     public void changeVotes(){
         // Check if votes have been entered for this project
