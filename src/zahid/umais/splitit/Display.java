@@ -135,7 +135,7 @@ public class Display {
         } else {
             // Print list of project names
             for (int i = 0; i < SplitIt.projectList.size(); i++){
-                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).returnName());
+                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).getName());
             }
 
             // Scan their choice of project and validate the input
@@ -197,7 +197,7 @@ public class Display {
 
             // Print list of project names
             for (int i = 0; i < SplitIt.projectList.size(); i++){
-                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).returnName());
+                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).getName());
             }
 
             // Scan their choice of project and validate the input
@@ -230,12 +230,28 @@ public class Display {
         if (SplitIt.projectList != null && !SplitIt.projectList.isEmpty()){
             System.out.println("\tHere is a list of your projects!\n");
             for (int i = 0; i < SplitIt.projectList.size(); i++){
-                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).returnName());
+                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).getName());
             }
             System.out.println();
         } else {
             System.out.println("\tI'm afraid you don't have any projects. :(\n");
             System.out.println("\tFeel free to create some however ");
+        }
+
+        // Scan their choice of project and validate the input
+        System.out.print("\tYour choice: ");
+        int choice = integerInputValidation(1,SplitIt.projectList.size(), "Please enter a value between " + 1 + " and " + SplitIt.projectList.size() + ": ",1);
+
+        // Return the project name
+        Project chosenProject = SplitIt.projectList.get(choice-1);
+
+        // Request votes for the project
+        HashMap<String,Integer> allocatedVotes = chosenProject.getAllocatedVotes();
+
+        // Display name and vote pairs
+        System.out.println("\n\tThe point allocation based on votes is: \n");
+        for (String name: allocatedVotes.keySet()){
+            System.out.println("\t\t- " + name + ":   " + allocatedVotes.get(name));
         }
 
         System.out.println(); // Spacing
@@ -279,7 +295,6 @@ public class Display {
     public static int integerInputValidation(int minVal, int maxVal, String errorMessage, int marginSize){
         boolean inputValid = false;
 
-
         int inputInt = 0;
         String marginTabs = "";
 
@@ -312,7 +327,7 @@ public class Display {
     // @param marginSize: integer number of tabs to add to the margin of the error messages to ensure they align properly
     // @return String containing scanned and validated input. Input is also trimmed to remove encasing whitespaces.
     //-----------------------------------------------------------------------------------------------------
-    public static String stringInputValidation(boolean acceptOnlyLetters, boolean checkEmpty, int marginSize){
+    private static String stringInputValidation(boolean acceptOnlyLetters, boolean checkEmpty, int marginSize){
 
         // This boolean stores whether the input is valid or not
         boolean inputValid = false;

@@ -20,6 +20,7 @@ public class Project {
     // {Smith: {John: Vote}, {Adam: Vote}}
     // }
     private HashMap<String, HashMap<String,Integer>> projectVotes;
+    private HashMap<String,Integer> allocatedVotes;
 
 
     //---------------------------------------------------------
@@ -29,6 +30,7 @@ public class Project {
         this.name = name;
         this.noOfMembers = noOfMembers;
         this.memberNames = memberNames;
+        this.allocatedVotes = new HashMap<String,Integer>();
 
         // Our project votes container is a hashmap containing a hashmap of String and Integer pairs.
         // This corresponds to voter Names, votee Names, and votes.
@@ -47,14 +49,14 @@ public class Project {
     //---------------------------------------------------------
     // Getter:- Returns the number of members.
     //---------------------------------------------------------
-    public int returnNoOfMembers(){
+    public int getNoOfMembers(){
         return this.noOfMembers;
     }
 
     //---------------------------------------------------------
     // Getter:- Returns name of Project.
     //---------------------------------------------------------
-    public String returnName(){
+    public String getName(){
         return this.name;
     }
 
@@ -68,15 +70,25 @@ public class Project {
     //---------------------------------------------------------
     // Getter:- Returns array list of members names.
     //---------------------------------------------------------
-    public String[] returnMemberNames(){
+    public String[] getMemberNames(){
         return this.memberNames;
     }
     //---------------------------------------------------------
     // Getter:- Returns members votes in the form of a HashMap of Strings and HashMaps. (VoterName: (VoteeName: Vote))
     //---------------------------------------------------------
-    public HashMap<String,HashMap<String,Integer>> returnProjectVotes(){
+    public HashMap<String,HashMap<String,Integer>> getProjectVotes(){
         return this.projectVotes;
     }
+
+    //---------------------------------------------------------
+    // Getter:- Calculate and allocates final votes
+    //---------------------------------------------------------
+    public HashMap<String,Integer> getAllocatedVotes(){
+        return this.allocatedVotes;
+    }
+
+
+
 
     //---------------------------------------------------------
     // Setter:- Request and set votes for this project instance
@@ -121,11 +133,12 @@ public class Project {
         }
 
         this.votesInitialised = true; // Set votes initialised boolean to true
+        calculateAllocatedVotes();
         System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY SET!");
 
     }
 
-    //---------------------------------------------------------
+       //---------------------------------------------------------
     // Setter:- Change the votes from a particular individual
     //---------------------------------------------------------
     public void changeVotes(){
@@ -171,9 +184,31 @@ public class Project {
             }
         }
 
-    System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY UPDATED!");
+        calculateAllocatedVotes();
+        System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY UPDATED!");
 
     }
+
+    //---------------------------------------------------------
+    // Setter:- Calculate and allocates final votes
+    //---------------------------------------------------------
+    private void calculateAllocatedVotes(){
+
+        for (int i = 0; i < noOfMembers; i++){
+            float calculatedVote = 0;
+            for (int j = 0; j < noOfMembers; j++){
+                if (i!=j){
+                    calculatedVote += ((float)projectVotes.get(memberNames[j]).get(memberNames[3-i-j]))/((float)projectVotes.get(memberNames[j]).get(memberNames[i]));
+                }
+            }
+            calculatedVote = 100*(1/(1+calculatedVote));
+
+            allocatedVotes.put(memberNames[i],(int) calculatedVote);
+        }
+
+
+    }
+
 
 
 }
