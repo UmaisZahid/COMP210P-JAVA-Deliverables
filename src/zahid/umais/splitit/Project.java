@@ -3,6 +3,7 @@ package zahid.umais.splitit;
 import java.util.HashMap;
 import static zahid.umais.splitit.Display.integerInputValidation; // Import static instance of integer input validation
 
+
 public class Project {
 
     //---------------------------------------------------------
@@ -27,6 +28,7 @@ public class Project {
     // Constructor:- Create Project instance.
     //---------------------------------------------------------
     Project(String name, int noOfMembers, String[] memberNames) {
+        // Set instance variables
         this.name = name;
         this.noOfMembers = noOfMembers;
         this.memberNames = memberNames;
@@ -87,9 +89,6 @@ public class Project {
         return this.allocatedVotes;
     }
 
-
-
-
     //---------------------------------------------------------
     // Setter:- Request and set votes for this project instance
     //---------------------------------------------------------
@@ -133,7 +132,7 @@ public class Project {
         }
 
         this.votesInitialised = true; // Set votes initialised boolean to true
-        calculateAllocatedVotes();
+        this.calculateAllocatedVotes();
         System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY SET!");
 
     }
@@ -193,22 +192,25 @@ public class Project {
     // Setter:- Calculate and allocates final votes
     //---------------------------------------------------------
     private void calculateAllocatedVotes(){
-
+        // Iterate over each member and calculate their associated vote
         for (int i = 0; i < noOfMembers; i++){
-            float calculatedVote = 0;
+            float calculatedVote = 0; // Store calculated vote
             for (int j = 0; j < noOfMembers; j++){
+                // Find the ratio: r^(j)((3-i-j)/j)
+                // The 3-i-j, ensures that we pick the right individual to do the ratio. 3 comes from the sum of 0 + 1 + 2.
                 if (i!=j){
                     calculatedVote += ((float)projectVotes.get(memberNames[j]).get(memberNames[3-i-j]))/((float)projectVotes.get(memberNames[j]).get(memberNames[i]));
                 }
             }
-            calculatedVote = 100*(1/(1+calculatedVote));
+            // Complete calculation of fraction: 1/(1 + ratios)
+            // Multiply decimal by 100 to get percentage
+            calculatedVote = Math.round(100*(1/(1+calculatedVote)));
 
+            // Assign the allocated vote to the correct member
             allocatedVotes.put(memberNames[i],(int) calculatedVote);
         }
 
 
     }
-
-
 
 }

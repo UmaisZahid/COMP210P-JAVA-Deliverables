@@ -25,7 +25,7 @@ public class Display {
         System.out.println("\t\tCreate Project (C)");
         System.out.println("\t\tEnter Votes (V)");
         System.out.println("\t\tChange Your Votes (H)");
-        System.out.println("\t\tShow Project (S)");
+        System.out.println("\t\tShow Allocated Votes (S)");
         System.out.println("\t\tQuit (Q)");
         System.out.println();
         pickOption(); // requests user to pick option
@@ -95,7 +95,7 @@ public class Display {
         // Request number of members
         System.out.print("\n\tPlease provide the number of members (Min: 3, Max: 50): ");
         // Scan the next integer while ensuring it's valid input
-        int noMembers = integerInputValidation(3,50, "Please enter a number between 3 and 50: ",1);
+        int noMembers = integerInputValidation(3,3, "Please enter 3, it is the only value supported: ",1);
 
         System.out.println(); // Spacing
 
@@ -226,32 +226,33 @@ public class Display {
         System.out.println("\tSHOW PROJECTS!");
         System.out.println("\t---------------------------------------------------------------------\n");
 
-        // List project names
-        if (SplitIt.projectList != null && !SplitIt.projectList.isEmpty()){
-            System.out.println("\tHere is a list of your projects!\n");
-            for (int i = 0; i < SplitIt.projectList.size(); i++){
-                System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).getName());
-            }
-            System.out.println();
+        if (SplitIt.projectList == null || SplitIt.projectList.size() == 0){
+            System.out.println("\tI'm afraid you haven't entered any projects yet. :(\n");
+            System.out.println("\tFeel free to create some however!");
         } else {
-            System.out.println("\tI'm afraid you don't have any projects. :(\n");
-            System.out.println("\tFeel free to create some however ");
-        }
+            // Request they select a project to change votes for
+            System.out.println("\tPlease choose a project from the projects list: \n");
 
-        // Scan their choice of project and validate the input
-        System.out.print("\tYour choice: ");
-        int choice = integerInputValidation(1,SplitIt.projectList.size(), "Please enter a value between " + 1 + " and " + SplitIt.projectList.size() + ": ",1);
+            // Print list of project names
+            for (int i = 0; i < SplitIt.projectList.size(); i++) {
+                System.out.println("\t\t" + (i + 1) + ") " + SplitIt.projectList.get(i).getName());
+            }
 
-        // Return the project name
-        Project chosenProject = SplitIt.projectList.get(choice-1);
+            // Scan their choice of project and validate the input
+            System.out.print("\n\tYour choice: ");
+            int choice = integerInputValidation(1, SplitIt.projectList.size(), "Please enter a value between " + 1 + " and " + SplitIt.projectList.size(), 1);
 
-        // Request votes for the project
-        HashMap<String,Integer> allocatedVotes = chosenProject.getAllocatedVotes();
+            // Return the project name
+            Project chosenProject = SplitIt.projectList.get(choice - 1);
 
-        // Display name and vote pairs
-        System.out.println("\n\tThe point allocation based on votes is: \n");
-        for (String name: allocatedVotes.keySet()){
-            System.out.println("\t\t- " + name + ":   " + allocatedVotes.get(name));
+            // Request votes for the project
+            HashMap<String, Integer> allocatedVotes = chosenProject.getAllocatedVotes();
+
+            // Display name and vote pairs
+            System.out.println("\n\tThe point allocation based on votes is: \n");
+            for (String name : allocatedVotes.keySet()) {
+                System.out.println("\t\t- " + name + ":   " + allocatedVotes.get(name));
+            }
         }
 
         System.out.println(); // Spacing
