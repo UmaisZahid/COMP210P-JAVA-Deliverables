@@ -12,7 +12,7 @@ public class Project {
     private String name;
     private int noOfMembers;
     private String[] memberNames;
-    private boolean votesInitialised = false; // Set ot true when votes are entered for the first time
+    private boolean votesInitialised = false; // Set of true when votes are entered for the first time
     // Stores map of Voter Name to (Votee Name: Vote), Key Value pairs.
     // Example for three members: John, Adam, and Smith
     // {
@@ -22,6 +22,7 @@ public class Project {
     // }
     private HashMap<String, HashMap<String,Integer>> projectVotes;
     private HashMap<String,Integer> allocatedVotes;
+    private Votes votes;
 
 
     //---------------------------------------------------------
@@ -33,6 +34,7 @@ public class Project {
         this.noOfMembers = noOfMembers;
         this.memberNames = memberNames;
         this.allocatedVotes = new HashMap<String,Integer>();
+        this.votes = new Votes(noOfMembers, memberNames);
 
         // Our project votes container is a hashmap containing a hashmap of String and Integer pairs.
         // This corresponds to voter Names, votee Names, and votes.
@@ -43,7 +45,6 @@ public class Project {
                 if(!voteeName.equals(voterName)){ // They can not vote on themselves
                     projectVotes.get(voterName).put(voteeName, 0); // Initially all votes are set to 0
                 }
-
             }
         }
     }
@@ -66,7 +67,7 @@ public class Project {
     // Getter:- Returns votes intialised boolean.
     //---------------------------------------------------------
     public boolean areVotesInitialised(){
-        return this.votesInitialised;
+        return this.votes.areVotesInitialised();
     }
 
     //---------------------------------------------------------
@@ -79,21 +80,51 @@ public class Project {
     // Getter:- Returns members votes in the form of a HashMap of Strings and HashMaps. (VoterName: (VoteeName: Vote))
     //---------------------------------------------------------
     public HashMap<String,HashMap<String,Integer>> getProjectVotes(){
-        return this.projectVotes;
+        return this.votes.getProjectVotes();
     }
 
     //---------------------------------------------------------
     // Getter:- Calculate and allocates final votes
     //---------------------------------------------------------
     public HashMap<String,Integer> getAllocatedVotes(){
-        return this.allocatedVotes;
+        return this.votes.getAllocatedVotes();
     }
+
+    public void setSingleMemberVotes(String votingMember){
+        int remainingPoints = 100; // Keeps track of the number of points left to be assigned
+        int noOfMembersVotedOn = 0; // Used to automatically enter the remaining points if there is only one member remaining
+
+        for (int memberVotedOn = 0; memberVotedOn < noOfMembers; memberVotedOn++){
+            // Prevent the member from voting on themselves.
+            if (!memberNames[memberVotedOn].equals(votingMember)){
+
+                // If this is the last member to be voted on, ensure that the entered value is the remaining points.
+                noOfMembersVotedOn++;
+                if (noOfMembersVotedOn == (noOfMembers-1)){
+                    // If there is only one vote remaining, automatically set it to the remaining points.
+                    // The line below sets the vote from the votingMember to the memberVotedOn with the remaining points.
+                    this.votes.setVote(votingMember,memberNames[memberVotedOn],remainingPoints);
+                    System.out.print("\t\tEnter " + votingMember + "'s vote for " + memberNames[memberVotedOn] + ": " + remainingPoints);
+                    System.out.println(" (Vote set automatically to remaining points!)");
+                } else {
+                    // Otherwise request for vote
+                    System.out.print("\t\tEnter " + votingMember + "'s vote for " + memberNames[memberVotedOn] + ": ");
+                    int currentVote = integerInputValidation(0,remainingPoints, "Please enter a vote between " + 0 + " and " + remainingPoints + ": ",2);
+
+                    // The line below sets the vote from the votingMember to the memberVotedOn with the vote provided
+                    this.votes.setVote(votingMember,memberNames[memberVotedOn],currentVote); // Get votes array from hashmap and update vote
+                    remainingPoints  -= currentVote; // Update the number of remaining points.
+                }
+            }
+        }
+    }
+
 
     //---------------------------------------------------------
     // Setter:- Request and set votes for this project instance
     //---------------------------------------------------------
     public void requestVotes(){
-        System.out.println("\tYou are voting for " + this.name + "!");
+        System.out.println("\tYou are assigning for " + this.name + "!");
         System.out.println("\tThere are " + this.noOfMembers + " members in this group.");
 
         // Iterate over the members and request votes for each of them
@@ -101,48 +132,21 @@ public class Project {
 
             System.out.println("\n\tEnter " + this.memberNames[votingMember] + "'s  votes, points must add up to 100: ");
 
-            int remainingPoints = 100; // Keeps track of the number of points left to be assigned
-            int noOfMembersVotedOn = 0; // Used to automatically enter the remaining points if there is only one member remaining
-
-            // Iterate over members being voted on
-            for (int memberVotedOn = 0; memberVotedOn < noOfMembers; memberVotedOn++){
-                // Prevent the member from voting on themselves.
-                if (memberVotedOn != votingMember){
-
-                    // If this is the last member to be voted on, ensure that the entered value is the remaining points.
-                    noOfMembersVotedOn++;
-                    if (noOfMembersVotedOn == (noOfMembers-1)){
-                        // If there is only one vote remaining, automatically set it to the remaining points.
-                        // The line below sets the vote from the votingMember to the memberVotedOn with the remaining points.
-                        this.projectVotes.get(memberNames[votingMember]).put(memberNames[memberVotedOn],remainingPoints);
-                        System.out.print("\t\tEnter " + memberNames[votingMember] + "'s vote for " + memberNames[memberVotedOn] + ": " + remainingPoints);
-                        System.out.println(" (Vote set automatically to remaining points!)");
-                    } else {
-                        // Otherwise request for vote
-                        System.out.print("\t\tEnter " + memberNames[votingMember] + "'s vote for " + memberNames[memberVotedOn] + ": ");
-                        int currentVote = integerInputValidation(0,remainingPoints, "Please enter a vote between " + 0 + " and " + remainingPoints + ": ",2);
-
-                        // The line below sets the vote from the votingMember to the memberVotedOn with the vote provided
-                        this.projectVotes.get(memberNames[votingMember]).put(memberNames[memberVotedOn],currentVote); // Get votes array from hashmap and update vote
-                        remainingPoints  -= currentVote; // Update the number of remaining points.
-
-                    }
-                }
-            }
+            this.setSingleMemberVotes(this.memberNames[votingMember]);
         }
 
-        this.votesInitialised = true; // Set votes initialised boolean to true
-        this.calculateAllocatedVotes();
+        this.votes.setVotesInitialised(); // Set votes initialised boolean to true
+        this.votes.calculateAllocatedVotes();
         System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY SET!");
 
     }
 
-       //---------------------------------------------------------
+    //---------------------------------------------------------
     // Setter:- Change the votes from a particular individual
     //---------------------------------------------------------
     public void changeVotes(){
         // Check if votes have been entered for this project
-        if (!votesInitialised){
+        if (!areVotesInitialised()){
             System.out.println("\tYou have not entered any votes for this project!");
             System.out.println("\tPlease enter votes from the main menu.");
             return; // Return if no votes entered
@@ -161,55 +165,12 @@ public class Project {
         int choice = integerInputValidation(1,noOfMembers, "Please enter a value between " + 1 + " and " + noOfMembers,1);
         String votingMember = memberNames[choice-1]; // Arrays start at 0
 
-        int remainingPoints = 100;  // Keeps track of the number of points left to be assigned
-        int noOfMembersVotedOn = 0; // Keeps track of the number of members voted on, if 1 member remaining set votes automatically
-        for (String memberVotedOn : projectVotes.get(votingMember).keySet()){
-            noOfMembersVotedOn++;
-            if (noOfMembersVotedOn == (noOfMembers-1)){
-                // If there is only one vote remaining, automatically set it to the remaining points.
-                // The line below sets the vote from the votingMember to the memberVotedOn with the remaining points.
-                this.projectVotes.get(votingMember).put(memberVotedOn,remainingPoints);
-                System.out.print("\t\tEnter " + votingMember + "'s vote for " + memberVotedOn + ": " + remainingPoints);
-                System.out.println(" (Vote set automatically to remaining points!)");
-            } else {
-                // Otherwise request for vote
-                System.out.print("\t\tEnter " + votingMember + "'s vote for " + memberVotedOn + ": ");
-                int currentVote = integerInputValidation(0,remainingPoints, "Please enter a vote between " + 0 + " and " + remainingPoints + ": ",2);
+        // Set the vote of the member chosen
+        setSingleMemberVotes(votingMember);
 
-                // The line below sets the vote from the votingMember to the memberVotedOn with the vote provided
-                this.projectVotes.get(votingMember).put(memberVotedOn,currentVote); // Get votes array from hashmap and update vote
-                remainingPoints  -= currentVote; // Update the number of remaining points.
-
-            }
-        }
-
-        calculateAllocatedVotes();
+        // Recalculate Allocated Votes
+        this.votes.calculateAllocatedVotes();
         System.out.println("\n\t\t\t\t\tVOTES SUCCESSFULLY UPDATED!");
-
-    }
-
-    //---------------------------------------------------------
-    // Setter:- Calculate and allocates final votes
-    //---------------------------------------------------------
-    private void calculateAllocatedVotes(){
-        // Iterate over each member and calculate their associated vote
-        for (int i = 0; i < noOfMembers; i++){
-            float calculatedVote = 0; // Store calculated vote
-            for (int j = 0; j < noOfMembers; j++){
-                // Find the ratio: r^(j)((3-i-j)/j)
-                // The 3-i-j, ensures that we pick the right individual to do the ratio. 3 comes from the sum of 0 + 1 + 2.
-                if (i!=j){
-                    calculatedVote += ((float)projectVotes.get(memberNames[j]).get(memberNames[3-i-j]))/((float)projectVotes.get(memberNames[j]).get(memberNames[i]));
-                }
-            }
-            // Complete calculation of fraction: 1/(1 + ratios)
-            // Multiply decimal by 100 to get percentage
-            calculatedVote = Math.round(100*(1/(1+calculatedVote)));
-
-            // Assign the allocated vote to the correct member
-            allocatedVotes.put(memberNames[i],(int) calculatedVote);
-        }
-
 
     }
 

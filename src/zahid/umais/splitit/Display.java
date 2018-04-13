@@ -2,6 +2,7 @@ package zahid.umais.splitit;
 
 import java.util.*; // Import java utility classes
 // Import static scanner instance, and utility functions
+import static zahid.umais.splitit.SplitIt.projectList;
 import static zahid.umais.splitit.SplitIt.scan;
 
 public class Display {
@@ -87,10 +88,24 @@ public class Display {
         System.out.println("\t---------------------------------------------------------------------\n");
 
         // Request and scan Project name
-        System.out.print("\tPlease provide a Project name: ");
+        boolean projectNameValid = false;
+        String projectName = "";
+        while(!projectNameValid){
+            projectNameValid = true; // Set boolean to false, unless it detects
+            System.out.print("\tPlease provide a project name: ");
 
-        // Scan project name, ensure it is not empty
-        String projectName = stringInputValidation(false, true,1);
+            // Scan project name, ensure it is not empty
+            projectName = stringInputValidation(false, true,1);
+
+            for (Project project : projectList){
+                if (project.getName().toLowerCase().equals(projectName.toLowerCase())){
+                    projectNameValid = false;
+                }
+            }
+            if (!projectNameValid){
+                System.out.println("\tThis project has already been entered.");
+            }
+        }
 
         // Request number of members
         System.out.print("\n\tPlease provide the number of members (Min: 3, Max: 50): ");
