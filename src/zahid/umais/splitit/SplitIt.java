@@ -2,6 +2,7 @@ package zahid.umais.splitit;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -35,12 +36,12 @@ public class SplitIt{
     //----------------------------------------------------------------------
     // This static function reads the array list of projects in JSON format from a .json file.
     //----------------------------------------------------------------------
-    private static void readProjectsFromFile(){
+    private static void readProjectsFromFile() throws IOException{
         //Deserialize projects from file, if no file exists, catch exception and do nothing.
         try(FileReader fileReader = new FileReader(PROJECT_LIST_FILE_NAME)){
             projectList = new ArrayList<Project>(Arrays.asList(jsonSerializer.fromJson(fileReader, Project[].class)));
-        } catch (IOException ioe) {
-            // No need to do anything
+        } catch (IOException |JsonIOException ioe) {
+            throw ioe; //throw exception upward so that the calling method may force exit the program
         }
     }
 
@@ -48,13 +49,18 @@ public class SplitIt{
     // Main Method
     //-----------------------------------------------------------------------------------------------------
     public static void main(String[] args){
-
         //---------------------------------------------------------
         // Create new Display instance, display menu and populate project array list from JSON file.
         //---------------------------------------------------------
         Display currentDisplay = new Display();
         currentDisplay.displayMenu();
-        readProjectsFromFile();
+        try { readProjectsFromFile(); }
+        catch (IOException ioe){
+            // This would indicate that the file does not exist, which does not matter, so we ignore it.
+        } catch (JsonIOException jioe) {
+            System.out.println("\tThere was an error reading the projects list. Please ensure the project list file has not been tampered with.");
+            currentDisplay.option = 'q'; // Force exit the program
+        }
 
         //-------------------------------------------------------------------------
         // Main execution block: keeps program running until exit boolean is true.

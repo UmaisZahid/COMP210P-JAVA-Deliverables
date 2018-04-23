@@ -12,7 +12,6 @@ public class Project {
     private String name;
     private int noOfMembers;
     private String[] memberNames;
-    private boolean votesInitialised = false; // Set of true when votes are entered for the first time
     // Stores map of Voter Name to (Votee Name: Vote), Key Value pairs.
     // Example for three members: John, Adam, and Smith
     // {
@@ -20,8 +19,6 @@ public class Project {
     // {Adam: {John: Vote}, {Smith: Vote}}
     // {Smith: {John: Vote}, {Adam: Vote}}
     // }
-    private HashMap<String, HashMap<String,Integer>> projectVotes;
-    private HashMap<String,Integer> allocatedVotes;
     private Votes votes;
 
 
@@ -33,20 +30,8 @@ public class Project {
         this.name = name;
         this.noOfMembers = noOfMembers;
         this.memberNames = memberNames;
-        this.allocatedVotes = new HashMap<String,Integer>();
         this.votes = new Votes(noOfMembers, memberNames);
 
-        // Our project votes container is a hashmap containing a hashmap of String and Integer pairs.
-        // This corresponds to voter Names, votee Names, and votes.
-        this.projectVotes = new HashMap<String, HashMap<String,Integer>>();
-        for (String voterName: memberNames){
-            projectVotes.put(voterName, new HashMap<String,Integer>()); // Create map/dictionary of votes for each member
-            for (String voteeName: memberNames){
-                if(!voteeName.equals(voterName)){ // They can not vote on themselves
-                    projectVotes.get(voterName).put(voteeName, 0); // Initially all votes are set to 0
-                }
-            }
-        }
     }
 
     //---------------------------------------------------------
@@ -90,6 +75,10 @@ public class Project {
         return this.votes.getAllocatedVotes();
     }
 
+
+    //---------------------------------------------------------
+    // Requests and sets votes for a single member. Method separated to reduce repeated code
+    //---------------------------------------------------------
     public void setSingleMemberVotes(String votingMember){
         int remainingPoints = 100; // Keeps track of the number of points left to be assigned
         int noOfMembersVotedOn = 0; // Used to automatically enter the remaining points if there is only one member remaining

@@ -133,7 +133,7 @@ public class Display {
     }
 
     //-----------------------------------------------------------------------------------------------------
-    // Display enter votes page. Currently a dummy method for future deliverables, redirects to main menu.
+    // Display enter votes page. Where you can enter votes for a particular project
     //-----------------------------------------------------------------------------------------------------
     public void displayEnterVotes(){
 
@@ -141,13 +141,16 @@ public class Display {
         System.out.println("\t---------------------------------------------------------------------");
         System.out.println("\tENTER VOTES!");
         System.out.println("\t---------------------------------------------------------------------\n");
-        // Request they select a project to enter votes for
-        System.out.println("\tPlease choose a project from the projects list: \n");
+
 
         // Check if project list is empty or uninitialised. If not, output project names in a list with index.
         if (SplitIt.projectList == null || SplitIt.projectList.size() == 0){
             System.out.println("\tI'm afraid you haven't entered any projects yet. :(");
+            System.out.println("\tFeel free to create some however!");
         } else {
+            // Request they select a project to enter votes for
+            System.out.println("\tPlease choose a project from the projects list: \n");
+
             // Print list of project names
             for (int i = 0; i < SplitIt.projectList.size(); i++){
                 System.out.println("\t\t" + (i+1) + ") " + SplitIt.projectList.get(i).getName());
@@ -200,7 +203,7 @@ public class Display {
         System.out.println();
         System.out.println("\t---------------------------------------------------------------------");
         System.out.println("\tCHANGE YOUR VOTES!");
-        System.out.println("\t---------------------------------------------------------------------");
+        System.out.println("\t---------------------------------------------------------------------\n");
 
         // Check if project list is empty or uninitialised. If not, output project names in a list with index.
         if (SplitIt.projectList == null || SplitIt.projectList.size() == 0){
@@ -233,7 +236,7 @@ public class Display {
     }
 
     //-----------------------------------------------------------------------------------------------------
-    // Display show projects page. Currently a dummy method for future deliverables, redirects to main menu.
+    // Display show projects page.
     //-----------------------------------------------------------------------------------------------------
     public void displayShowProjects(){
         System.out.println();
@@ -296,7 +299,7 @@ public class Display {
     // Runs exit sequence. Saves projects array to JSON file and sets exit boolean to true.
     //-----------------------------------------------------------------------------------------------------
     public void exit(){
-        SplitIt.storeProjectsToFile();
+        SplitIt.storeProjectsToFile(); //Save projects list to file.
         this.exit = true;
     }
 
